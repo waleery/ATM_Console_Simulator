@@ -25,7 +25,6 @@ class ATM_simulator : IUserLogin
     {
         bool isCorrectLogin = false;
         UserAccount inputAccount = AppScreen.UserLoginForm();
-
         AppScreen.LoginProgress();
     }
 

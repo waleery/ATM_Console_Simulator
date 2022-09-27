@@ -16,6 +16,7 @@ namespace ATM_Simulator.App.UI
             Console.Clear();
         }
 
+        //get card number and pin from user
         internal static UserAccount UserLoginForm()
         {
             UserAccount tempUserAccount = new UserAccount();
@@ -26,6 +27,7 @@ namespace ATM_Simulator.App.UI
             return tempUserAccount;
         }
 
+        //animation of dots
         internal static void LoginProgress()
         {
             Console.WriteLine("\nChecking card number and PIN...");

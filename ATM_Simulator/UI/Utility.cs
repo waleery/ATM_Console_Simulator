@@ -5,6 +5,8 @@ namespace ATM_Simulator.App.UI
 {
     public static class Utility
     {
+
+        //get specyfic data from user
         public static string GetUserInput(string prompt)
         {
             Console.WriteLine($"Enter {prompt}");
@@ -17,6 +19,7 @@ namespace ATM_Simulator.App.UI
             Console.ReadLine();
         }
 
+        //print message, error = red, succes == yellow
         public static void PrintMessage(string message, bool success = true)
         {
             if (success)
@@ -33,6 +36,7 @@ namespace ATM_Simulator.App.UI
 
         }
 
+        //to display asterix when user is entering pin
         public static string GetSecretInput(string prompt)
         {
             bool isPrompt = true;
