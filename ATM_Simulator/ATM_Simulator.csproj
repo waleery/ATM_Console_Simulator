@@ -9,10 +9,14 @@
 
   <ItemGroup>
     <None Remove="App\" />
-    <None Remove="App\UI\" />
+    <None Remove="UI\" />
+    <None Remove="Domain\" />
+    <None Remove="Domain\Entities\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App\" />
-    <Folder Include="App\UI\" />
+    <Folder Include="UI\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Domain\Entities\" />
   </ItemGroup>
 </Project>
