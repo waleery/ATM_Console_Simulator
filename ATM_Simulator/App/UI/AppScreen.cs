@@ -10,9 +10,10 @@ namespace ATM_Simulator.App.UI
             Console.WriteLine("Note: Actual ATM machine will accept and validate" +
                 " a phisical ATM card, read the card number and validate it \n");
 
-            Console.WriteLine("Press Enter to continue... \n");
-            Console.ReadLine();
+            Utility.PressEnterToContinue();
         }
+
+       
     }
 }
 
