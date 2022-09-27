@@ -1,4 +1,6 @@
 ﻿using System;
+using ATM_Simulator.Domain.Entities;
+
 namespace ATM_Simulator.App.UI
 {
     public class AppScreen
@@ -11,9 +13,24 @@ namespace ATM_Simulator.App.UI
                 " a phisical ATM card, read the card number and validate it \n");
 
             Utility.PressEnterToContinue();
+            Console.Clear();
         }
 
-       
+        internal static UserAccount UserLoginForm()
+        {
+            UserAccount tempUserAccount = new UserAccount();
+
+            tempUserAccount.CardNumber = Validator.Convert<long>("your card number.");
+            tempUserAccount.CardPin = Convert.ToInt32(Utility.GetSecretInput("Enter your card PIN"));
+
+            return tempUserAccount;
+        }
+
+        internal static void LoginProgress()
+        {
+            Console.WriteLine("\nChecking card number and PIN...");
+            Utility.PrintDotAnimation();
+        }
     }
 }
 

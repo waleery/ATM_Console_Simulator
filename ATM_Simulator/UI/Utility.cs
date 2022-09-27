@@ -13,7 +13,7 @@ namespace ATM_Simulator.App.UI
 
         public static void PressEnterToContinue()
         {
-            Console.WriteLine("\nPress Enter to continue...");
+            Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
         }
 
@@ -75,6 +75,17 @@ namespace ATM_Simulator.App.UI
             }
             return input.ToString();
         }
+
+        public static void PrintDotAnimation(int timer = 10)
+        {
+            for (int i = 0; i < timer; i++)
+            {
+                Console.Write(".");
+                Thread.Sleep(200);
+            }
+            Console.Clear();
+        }
     }
+
 }
 

@@ -24,12 +24,11 @@ class ATM_simulator : IUserLogin
     public void ChcekUserCardNumAndPassword()
     {
         bool isCorrectLogin = false;
+        UserAccount inputAccount = AppScreen.UserLoginForm();
 
-        UserAccount tempUserAccount = new UserAccount();
-
-        tempUserAccount.CardNumber = Validator.Convert<long>("your card number.");
-        tempUserAccount.CardPin = Convert.ToInt32(Utility.GetSecretInput("Enter your card PIN"));
+        AppScreen.LoginProgress();
     }
 
+    
 }
 
