@@ -1,0 +1,17 @@
+﻿namespace ATM_Simulator;
+
+
+class ATM_simulator
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("---------Welcome to my ATM Simulator---------\n\n");
+        Console.WriteLine("Please insert your ATM card");
+        Console.WriteLine("Note: Actual ATM machine will accept and validate" +
+            " a phisical ATM card, read the card number and validate it \n");
+
+        Console.WriteLine("Press Enter to continue... \n");
+        Console.ReadLine();
+    }
+}
+
