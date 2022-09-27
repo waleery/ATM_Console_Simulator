@@ -24,10 +24,67 @@ class ATM_simulator : IUserLogin
     public void ChcekUserCardNumAndPassword()
     {
         bool isCorrectLogin = false;
-        UserAccount inputAccount = AppScreen.UserLoginForm();
-        AppScreen.LoginProgress();
+
+        while (isCorrectLogin == false)
+        {
+            restart:
+            UserAccount inputAccount = AppScreen.UserLoginForm();
+            AppScreen.LoginProgress();
+
+            
+            foreach (UserAccount account in userAccountList)
+            {
+
+                selectedAccount = account;
+
+                //if typed card number is in database
+                if (inputAccount.CardNumber.Equals(selectedAccount.CardNumber))
+                {
+                    selectedAccount.TotalLogin++;
+
+                    if (inputAccount.CardPin.Equals(selectedAccount.CardPin))
+                    {
+                        //selectedAccount = account;
+
+                        if (selectedAccount.IsLocked)
+                        {
+                            AppScreen.PrintLockScreen();
+                            break;
+                        }
+                        else
+                        {
+                            selectedAccount.TotalLogin = 0;
+                            isCorrectLogin = true;
+                            break;
+                        }
+                    }
+
+                }
+
+                //if login or PIN was incorrect
+                if (isCorrectLogin == false)
+                {
+                    Utility.PrintMessage("\nInvalid card number or PIN.", false);
+
+                    //if user typed correct card number and wrong pin 3 times, account get blocked
+                    selectedAccount.IsLocked = selectedAccount.TotalLogin == 3;
+
+                    if (selectedAccount.IsLocked)
+                    {
+                        AppScreen.PrintLockScreen();
+                    }
+                }
+                Console.Clear();
+                goto restart;
+            }
+        }
+
+
+    }
+    public void Welcome()
+    {
+        Console.WriteLine($"Welcome back, {selectedAccount.FullName}.");
     }
 
-    
 }
 

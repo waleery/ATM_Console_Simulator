@@ -33,6 +33,15 @@ namespace ATM_Simulator.App.UI
             Console.WriteLine("\nChecking card number and PIN...");
             Utility.PrintDotAnimation();
         }
+
+        internal static void PrintLockScreen()
+        {
+            Console.Clear();
+            Utility.PrintMessage("You account is locked. Please go to the nearest branch" +
+                " to unlock your account.", false);
+            //exit app
+            Environment.Exit(1);
+        }
     }
 }
 
