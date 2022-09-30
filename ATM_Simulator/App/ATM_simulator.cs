@@ -112,10 +112,12 @@ class ATM_simulator : IUserLogin
                 Console.WriteLine("Viewing transaction...");
                 break;
             case (int)AppMenu.Logout:
-                Console.WriteLine("Loging out");
+                AppScreen.LogoutProgress();
+                Utility.PrintMessage("You have successfully logged out. Please collect your ATM card.");
+                Run();
                 break;
             default:
-                Console.WriteLine("Default action");
+                Utility.PrintMessage("Invalid option.", false);
                 break;
         }
     }

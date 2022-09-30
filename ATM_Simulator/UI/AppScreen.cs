@@ -60,6 +60,14 @@ namespace ATM_Simulator.App.UI
             Console.WriteLine("5. Transactions                        ");
             Console.WriteLine("6. Logout                              ");
         }
+
+        internal static void LogoutProgress()
+        {
+            Console.WriteLine("Than You for using my ATM simulator.");
+            Utility.PrintDotAnimation();
+            Console.Clear(); 
+
+        }
     }
 
     
