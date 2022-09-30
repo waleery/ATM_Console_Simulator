@@ -42,6 +42,26 @@ namespace ATM_Simulator.App.UI
             //exit app
             Environment.Exit(1);
         }
+
+        internal static void WelcomeCustomer(string fullName)
+        {
+            Console.WriteLine($"Welcome back, {fullName}.");
+            Utility.PressEnterToContinue();
+        }
+
+        internal static void DispalyAppMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("---------My ATM Simulator Menu---------\n");
+            Console.WriteLine("1. Account Balance                     ");
+            Console.WriteLine("2  Cash deposit                        ");
+            Console.WriteLine("3. Withdrawl                           ");
+            Console.WriteLine("4. Transfer                            ");
+            Console.WriteLine("5. Transactions                        ");
+            Console.WriteLine("6. Logout                              ");
+        }
     }
+
+    
 }
 

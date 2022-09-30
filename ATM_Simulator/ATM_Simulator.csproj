@@ -13,6 +13,7 @@
     <None Remove="Domain\" />
     <None Remove="Domain\Entities\" />
     <None Remove="Domain\Interfaces\" />
+    <None Remove="Domain\Enum\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App\" />
@@ -20,5 +21,6 @@
     <Folder Include="Domain\" />
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\Interfaces\" />
+    <Folder Include="Domain\Enum\" />
   </ItemGroup>
 </Project>

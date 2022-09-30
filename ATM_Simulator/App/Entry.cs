@@ -7,13 +7,9 @@ namespace ATM_Simulator.App
     {
         static void Main(string[] args)
         {
-            AppScreen.Welcome();
             ATM_simulator ATM_Simulator = new ATM_simulator();
             ATM_Simulator.InitializeData();
-            ATM_Simulator.ChcekUserCardNumAndPassword();
-            ATM_Simulator.Welcome();
-
-            //Utility.PressEnterToContinue();
+            ATM_Simulator.Run();
         }
     }
 }
