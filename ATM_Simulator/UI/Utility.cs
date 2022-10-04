@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace ATM_Simulator.App.UI
 {
     public static class Utility
     {
+        //to currency formating
+        private static CultureInfo culture = new CultureInfo("pl-PL");
 
         //get specyfic data from user
         public static string GetUserInput(string prompt)
@@ -51,7 +54,7 @@ namespace ATM_Simulator.App.UI
                     Console.WriteLine(prompt);
                 }
                 isPrompt = false;
-                ConsoleKeyInfo inputKey =  Console.ReadKey(true);
+                ConsoleKeyInfo inputKey = Console.ReadKey(true);
 
                 if(inputKey.Key == ConsoleKey.Enter)
                 {
@@ -89,7 +92,12 @@ namespace ATM_Simulator.App.UI
             }
             Console.Clear();
         }
-    }
 
+        public static string FormatAmount(decimal amount)
+        {
+                     //currency sumbol, decimal places, number 
+            return String.Format(culture, "{0:C2}", amount);
+        }
+    }
 }
 

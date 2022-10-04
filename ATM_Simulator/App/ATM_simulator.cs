@@ -6,7 +6,7 @@ using ATM_Simulator.Domain.Interfaces;
 namespace ATM_Simulator;
 
 
-class ATM_simulator : IUserLogin
+class ATM_simulator : IUserLogin, IUserAccountActions
 {
     private List<UserAccount> userAccountList;
     private UserAccount selectedAccount;
@@ -97,7 +97,7 @@ class ATM_simulator : IUserLogin
         switch(Validator.Convert<int>("an option:"))
         {
             case (int)AppMenu.CheckBalance:
-                Console.WriteLine("Checking account balance...");
+                CheckBalance();
                 break;
             case (int)AppMenu.PlaceDeposit:
                 Console.WriteLine("Placing deposit...");
@@ -120,6 +120,21 @@ class ATM_simulator : IUserLogin
                 Utility.PrintMessage("Invalid option.", false);
                 break;
         }
+    }
+
+    public void CheckBalance()
+    {
+        Utility.PrintMessage($"Your account balance is: {Utility.FormatAmount(selectedAccount.AccountBalance)}.");
+    }
+
+    public void PlaceDeposit()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void MakeWithDrawal()
+    {
+        throw new NotImplementedException();
     }
 }
 
