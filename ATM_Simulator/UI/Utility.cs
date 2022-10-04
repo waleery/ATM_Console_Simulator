@@ -6,8 +6,15 @@ namespace ATM_Simulator.App.UI
 {
     public static class Utility
     {
+        private static long tranId;
+
         //to currency formating
         private static CultureInfo culture = new CultureInfo("pl-PL");
+
+        public static long GetTransactionId()
+        {
+            return ++tranId;
+        }
 
         //get specyfic data from user
         public static string GetUserInput(string prompt)

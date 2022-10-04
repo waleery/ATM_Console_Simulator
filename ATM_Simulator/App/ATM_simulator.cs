@@ -6,7 +6,7 @@ using ATM_Simulator.Domain.Interfaces;
 namespace ATM_Simulator;
 
 
-class ATM_simulator : IUserLogin, IUserAccountActions
+class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 {
     private List<UserAccount> userAccountList;
     private UserAccount selectedAccount;
@@ -175,6 +175,25 @@ class ATM_simulator : IUserLogin, IUserAccountActions
         int opt = Validator.Convert<int>("1 to confirm");
 
         return opt.Equals(1); //if one return true, else return false
+    }
+
+    public void InsertTransaction(long _UserBankAccountID, TransactionType _tranType, decimal _tranAmount, string _desc)
+    {
+        //create a new transaction object
+        var transaction = new Transaction()
+        {
+            TransactionId = Utility.GetTransactionId(),
+            UserBankAccountId = _UserBankAccountID,
+            TransactionDate = DateTime.Now,
+            TransactionType = _tranType,
+            TransactionAmount = _tranAmount,
+            Description = _desc
+        };
+    }
+
+    public void ViewTransaction()
+    {
+        throw new NotImplementedException();
     }
 }
 
