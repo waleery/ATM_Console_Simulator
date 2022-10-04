@@ -10,6 +10,7 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 {
     private List<UserAccount> userAccountList;
     private UserAccount selectedAccount;
+    private List<Transaction> _listOfTransactions;
 
     public void Run()
     {
@@ -29,6 +30,8 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
             new UserAccount{Id=2, FullName="Barack Obama",AccountNumber=456789, CardNumber=654654, CardPin=456456, AccountBalance=100000.00m, IsLocked=false},
             new UserAccount{Id=3, FullName="Andrzej Duda",AccountNumber=123555, CardNumber=987987, CardPin=789789, AccountBalance=2900000.00m, IsLocked=true},
         };
+
+        _listOfTransactions = new List<Transaction>();
     }
 
     public void ChcekUserCardNumAndPassword()
