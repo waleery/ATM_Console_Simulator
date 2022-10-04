@@ -103,7 +103,7 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
                 CheckBalance();
                 break;
             case (int)AppMenu.PlaceDeposit:
-                Console.WriteLine("Placing deposit...");
+                PlaceDeposit();
                 break;
             case (int)AppMenu.MakeWithdrawl:
                 Console.WriteLine("Making withdrawl...");
@@ -132,11 +132,11 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
     public void PlaceDeposit()
     {
-        Console.WriteLine("Only multiples of 100 and 50 polish zloty allowed");
-        var transaction_amount = Validator.Convert<int>($"amount {AppScreen.cur}");
+        Console.WriteLine("\nOnly multiples of 100 and 50 polish zloty allowed");
+        var transaction_amount = Validator.Convert<int>($"amount{AppScreen.cur}");
 
         //simulate checking
-        Console.WriteLine("\nChecking and counting bank notes.");
+        Console.WriteLine("\nChecking and counting bills.");
         Utility.PrintDotAnimation();
         Console.WriteLine("");
 
@@ -146,7 +146,7 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
             Utility.PrintMessage("Amount needs to be greater than 0. Try again.", false);
             return;
         }
-        if(transaction_amount % 500 != 0)
+        if(transaction_amount % 50 != 0)
         {
             Utility.PrintMessage($"Enter deposit amount in multiples of 50 or 100. Try again.");
             return;
@@ -157,6 +157,15 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
             Utility.PrintMessage($"You have cancelled your action.", false);
             return;
         }
+
+        //bind transaction details to transaction object
+        InsertTransaction(selectedAccount.Id, TransactionType.Deposit, transaction_amount, "");
+
+        //update account balance
+        selectedAccount.AccountBalance += transaction_amount;
+
+        //print success message
+        Utility.PrintMessage($"Your deposit of {Utility.FormatAmount(transaction_amount)} was successful." );
     }
 
     public void MakeWithDrawal()
@@ -192,6 +201,9 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
             TransactionAmount = _tranAmount,
             Description = _desc
         };
+
+        //add transaction object to he list
+        _listOfTransactions.Add(transaction);
     }
 
     public void ViewTransaction()
