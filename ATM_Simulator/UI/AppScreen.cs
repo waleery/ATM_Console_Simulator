@@ -5,7 +5,9 @@ namespace ATM_Simulator.App.UI
 {
     public class AppScreen
     {
-        public static void Welcome()
+        internal const string cur = " Zł"; 
+
+        internal static void Welcome()
         {
             Console.WriteLine("---------Welcome to my ATM Simulator---------\n\n");
             Console.WriteLine("Please insert your ATM card");

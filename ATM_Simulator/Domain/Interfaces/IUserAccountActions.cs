@@ -9,3 +9,4 @@ namespace ATM_Simulator.Domain.Interfaces
     }
 }
 
+ 

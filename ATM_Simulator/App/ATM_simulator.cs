@@ -129,12 +129,52 @@ class ATM_simulator : IUserLogin, IUserAccountActions
 
     public void PlaceDeposit()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Only multiples of 100 and 50 polish zloty allowed");
+        var transaction_amount = Validator.Convert<int>($"amount {AppScreen.cur}");
+
+        //simulate checking
+        Console.WriteLine("\nChecking and counting bank notes.");
+        Utility.PrintDotAnimation();
+        Console.WriteLine("");
+
+        //some guard clause
+        if(transaction_amount <= 0)
+        {
+            Utility.PrintMessage("Amount needs to be greater than 0. Try again.", false);
+            return;
+        }
+        if(transaction_amount % 500 != 0)
+        {
+            Utility.PrintMessage($"Enter deposit amount in multiples of 50 or 100. Try again.");
+            return;
+        }
+
+        if(PreviewBankZlotysCount(transaction_amount) == false)
+        {
+            Utility.PrintMessage($"You have cancelled your action.", false);
+            return;
+        }
     }
 
     public void MakeWithDrawal()
     {
         throw new NotImplementedException();
+    }
+
+    private bool PreviewBankZlotysCount(int amount)
+    {
+        int hundredsZlotyCount = amount / 100;
+        int fiftiesZlotyCount = (amount % 100) / 50;
+
+        Console.WriteLine("\nSummary");
+        Console.WriteLine("---------");
+        Console.WriteLine($"100{AppScreen.cur} X {hundredsZlotyCount} = {100* hundredsZlotyCount}");
+        Console.WriteLine($"50{AppScreen.cur} X {fiftiesZlotyCount} = {50 * fiftiesZlotyCount}");
+        Console.WriteLine($"Total amount: {Utility.FormatAmount(amount)}\n\n");
+
+        int opt = Validator.Convert<int>("1 to confirm");
+
+        return opt.Equals(1); //if one return true, else return false
     }
 }
 
