@@ -121,7 +121,7 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
                 ProcessInternalTransfer(internalTransfer);
                 break;
             case (int)AppMenu.ViewTransaction:
-                Console.WriteLine("Viewing transaction...");
+                ViewTransaction();
                 break;
             case (int)AppMenu.Logout:
                 AppScreen.LogoutProgress();
@@ -264,7 +264,18 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
     public void ViewTransaction()
     {
-        throw new NotImplementedException();
+        //searching list of transactions logged user
+        var filteredTransactionList = _listOfTransactions.Where(t => t.UserBankAccountId == selectedAccount.Id).ToList();
+
+        //check if there is a transaction
+        if(filteredTransactionList.Count == 0)
+        {
+            Utility.PrintMessage("You have no transaction yet.", true);
+        }
+        else
+        {
+
+        }
     }
 
     private void ProcessInternalTransfer(InternalTransfer internalTrasfer)
