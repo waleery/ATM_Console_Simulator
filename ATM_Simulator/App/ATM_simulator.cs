@@ -6,12 +6,19 @@ using ATM_Simulator.Domain.Interfaces;
 namespace ATM_Simulator;
 
 
-class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
+public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 {
     private List<UserAccount> userAccountList;
     private UserAccount selectedAccount;
     private List<Transaction> _listOfTransactions;
     private const decimal minimumKeptAmount = 50;
+    private readonly AppScreen screen;
+
+    //create constructor
+    public ATM_simulator()
+    {
+        screen = new AppScreen();
+    }
 
     public void Run()
     {
@@ -110,7 +117,8 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
                 MakeWithDrawal();
                 break;
             case (int)AppMenu.InterlanTransfer:
-                Console.WriteLine("Making internal transfer...");
+                var internalTransfer = screen.InternalTransferForm();
+                ProcessInternalTransfer(internalTransfer);
                 break;
             case (int)AppMenu.ViewTransaction:
                 Console.WriteLine("Viewing transaction...");
@@ -257,6 +265,67 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
     public void ViewTransaction()
     {
         throw new NotImplementedException();
+    }
+
+    private void ProcessInternalTransfer(InternalTransfer internalTrasfer)
+    {
+        if(internalTrasfer.TransferAmount <= 0)
+        {
+            Utility.PrintMessage("Amount needs to be more than 0. Try again.", false);
+            return;
+        }
+
+        //check sender's account balance
+        if(internalTrasfer.TransferAmount > selectedAccount.AccountBalance)
+        {
+            Utility.PrintMessage($"Transfer failed. You do not have enough balance to transfer {Utility.FormatAmount(internalTrasfer.TransferAmount)}", false);
+            return;
+
+        }
+
+        //check the minium kept amount
+        if ((selectedAccount.AccountBalance - internalTrasfer.TransferAmount) < minimumKeptAmount)
+        {
+            Utility.PrintMessage($"Transfer failed. Your account needs to have minimum {Utility.FormatAmount(minimumKeptAmount)}", false);
+            return;
+        }
+
+        //check reciever's account number is valid
+        var selectedBankAccountReceiver = (from userAccount in userAccountList
+                                           where userAccount.AccountNumber == internalTrasfer.ReciepeintBankAccountNumber
+                                           select userAccount).FirstOrDefault();
+
+        //nothing was selected => invalid bank number
+        if(selectedBankAccountReceiver== null)
+        {
+            Utility.PrintMessage("Transfer failed. Receiver bank account number is invalid", false);
+            return;
+        }
+
+        //check receiver's name
+        if(selectedBankAccountReceiver.FullName != internalTrasfer.RecipientBankAccountName)
+        {
+            Utility.PrintMessage("Transfer failed. Recipient's bank account name doesn't match.", false);
+            return;
+        }
+
+        //add transaction to transaction record - sender
+        InsertTransaction(selectedAccount.Id, TransactionType.transfer, -internalTrasfer.TransferAmount, $"Transfer form {selectedAccount.FullName} to" +
+            $" {selectedBankAccountReceiver.FullName} -  receiver card number: ({selectedBankAccountReceiver.CardNumber})");
+
+        //update sender's account balance
+        selectedAccount.AccountBalance -= internalTrasfer.TransferAmount;
+
+        //add transaction to transaction record - receiver
+        InsertTransaction(selectedBankAccountReceiver.Id, TransactionType.transfer, internalTrasfer.TransferAmount, $"Transfer form {selectedAccount.FullName} to" +
+            $" {selectedBankAccountReceiver.FullName} - sender card number: ({selectedAccount.CardNumber})");
+
+        //update receiver's account balance
+        selectedBankAccountReceiver.AccountBalance += internalTrasfer.TransferAmount;
+
+        //print success message
+        Utility.PrintMessage($"You have successfully transfered {Utility.FormatAmount(internalTrasfer.TransferAmount)} to " +
+            $"{internalTrasfer.RecipientBankAccountName}", true);
     }
 }
 
