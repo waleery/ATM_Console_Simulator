@@ -60,7 +60,7 @@ namespace ATM_Simulator.App.UI
             Console.WriteLine("3. Withdrawl                           ");
             Console.WriteLine("4. Transfer                            ");
             Console.WriteLine("5. Transactions                        ");
-            Console.WriteLine("6. Logout                              ");
+            Console.WriteLine("6. Logout                               \n");
         }
 
         internal static void LogoutProgress()

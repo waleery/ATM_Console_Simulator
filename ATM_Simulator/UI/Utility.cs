@@ -41,7 +41,7 @@ namespace ATM_Simulator.App.UI
                 Console.ForegroundColor = ConsoleColor.Red;
             }
             Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
             PressEnterToContinue();
 
         }

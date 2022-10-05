@@ -2,6 +2,7 @@
 using ATM_Simulator.Domain.Entities;
 using ATM_Simulator.Domain.Enum;
 using ATM_Simulator.Domain.Interfaces;
+using ConsoleTables;
 
 namespace ATM_Simulator;
 
@@ -25,8 +26,13 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
         AppScreen.Welcome();
         ChcekUserCardNumAndPassword();
         AppScreen.WelcomeCustomer(selectedAccount.FullName);
-        AppScreen.DispalyAppMenu();
-        ProcessMenuOption();
+
+        while (true)
+        {
+            AppScreen.DispalyAppMenu();
+            ProcessMenuOption();
+        }
+        
     }
 
 
@@ -184,7 +190,8 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
         if (selectedAmount == -1)
         {
-            selectedAmount = AppScreen.SelectAmount();
+            MakeWithDrawal();
+            return;
         }
         else if (selectedAmount != 0)
         {
@@ -270,11 +277,20 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
         //check if there is a transaction
         if(filteredTransactionList.Count == 0)
         {
-            Utility.PrintMessage("You have no transaction yet.", true);
+            Utility.PrintMessage("You have no transaction yet.");
         }
         else
         {
+            //create table with headers
+            var table = new ConsoleTable("Id", "Transaction Date","Type", "Description", "Amount" + AppScreen.cur);
 
+            foreach(var transaction in filteredTransactionList)
+            {
+                table.AddRow(transaction.TransactionId, transaction.TransactionDate, transaction.TransactionType, transaction.Description, transaction.TransactionAmount);
+            }
+            table.Options.EnableCount = false;
+            table.Write();
+            Utility.PrintMessage($"You have {filteredTransactionList.Count} transactions");
         }
     }
 
@@ -322,14 +338,14 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
         //add transaction to transaction record - sender
         InsertTransaction(selectedAccount.Id, TransactionType.transfer, -internalTrasfer.TransferAmount, $"Transfer form {selectedAccount.FullName} to" +
-            $" {selectedBankAccountReceiver.FullName} -  receiver card number: ({selectedBankAccountReceiver.CardNumber})");
+            $" {selectedBankAccountReceiver.FullName} -  receiver bank number: ({selectedBankAccountReceiver.AccountNumber})");
 
         //update sender's account balance
         selectedAccount.AccountBalance -= internalTrasfer.TransferAmount;
 
         //add transaction to transaction record - receiver
         InsertTransaction(selectedBankAccountReceiver.Id, TransactionType.transfer, internalTrasfer.TransferAmount, $"Transfer form {selectedAccount.FullName} to" +
-            $" {selectedBankAccountReceiver.FullName} - sender card number: ({selectedAccount.CardNumber})");
+            $" {selectedBankAccountReceiver.FullName} - sender bank number: ({selectedAccount.AccountNumber})");
 
         //update receiver's account balance
         selectedBankAccountReceiver.AccountBalance += internalTrasfer.TransferAmount;
