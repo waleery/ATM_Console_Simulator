@@ -11,6 +11,7 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
     private List<UserAccount> userAccountList;
     private UserAccount selectedAccount;
     private List<Transaction> _listOfTransactions;
+    private const decimal minimumKeptAmount = 50;
 
     public void Run()
     {
@@ -18,7 +19,7 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
         ChcekUserCardNumAndPassword();
         AppScreen.WelcomeCustomer(selectedAccount.FullName);
         AppScreen.DispalyAppMenu();
-        ProcessMenuOption(); 
+        ProcessMenuOption();
     }
 
 
@@ -40,11 +41,11 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
         while (isCorrectLogin == false)
         {
-            restart:
+        restart:
             UserAccount inputAccount = AppScreen.UserLoginForm();
             AppScreen.LoginProgress();
 
-            
+
             foreach (UserAccount account in userAccountList)
             {
 
@@ -94,10 +95,10 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
 
     }
-    
+
     private void ProcessMenuOption()
     {
-        switch(Validator.Convert<int>("an option:"))
+        switch (Validator.Convert<int>("an option:"))
         {
             case (int)AppMenu.CheckBalance:
                 CheckBalance();
@@ -106,7 +107,7 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
                 PlaceDeposit();
                 break;
             case (int)AppMenu.MakeWithdrawl:
-                Console.WriteLine("Making withdrawl...");
+                MakeWithDrawal();
                 break;
             case (int)AppMenu.InterlanTransfer:
                 Console.WriteLine("Making internal transfer...");
@@ -141,18 +142,18 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
         Console.WriteLine("");
 
         //some guard clause
-        if(transaction_amount <= 0)
+        if (transaction_amount <= 0)
         {
             Utility.PrintMessage("Amount needs to be greater than 0. Try again.", false);
             return;
         }
-        if(transaction_amount % 50 != 0)
+        if (transaction_amount % 50 != 0)
         {
             Utility.PrintMessage($"Enter deposit amount in multiples of 50 or 100. Try again.");
             return;
         }
 
-        if(PreviewBankZlotysCount(transaction_amount) == false)
+        if (PreviewBankZlotysCount(transaction_amount) == false)
         {
             Utility.PrintMessage($"You have cancelled your action.", false);
             return;
@@ -165,12 +166,59 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
         selectedAccount.AccountBalance += transaction_amount;
 
         //print success message
-        Utility.PrintMessage($"Your deposit of {Utility.FormatAmount(transaction_amount)} was successful." );
+        Utility.PrintMessage($"Your deposit of {Utility.FormatAmount(transaction_amount)} was successful.");
     }
 
     public void MakeWithDrawal()
     {
-        throw new NotImplementedException();
+        var transaction_amount = 0;
+        int selectedAmount = AppScreen.SelectAmount();
+
+        if (selectedAmount == -1)
+        {
+            selectedAmount = AppScreen.SelectAmount();
+        }
+        else if (selectedAmount != 0)
+        {
+            transaction_amount = selectedAmount;
+        }
+        else
+        {
+            transaction_amount = Validator.Convert<int>($"amount {AppScreen.cur}");
+        }
+
+        //input validation
+        if (transaction_amount <= 0)
+        {
+            Utility.PrintMessage("Amount needs to be greater than zero. Try again", false);
+            return;
+        }
+        if(transaction_amount % 50 != 0)
+        {
+            Utility.PrintMessage("You can only withdraw amount in multiples of 50 or 100 zł. Try again.", false);
+            return;
+        }
+
+        //Business logic validations
+        if(transaction_amount > selectedAccount.AccountBalance)
+        {
+            Utility.PrintMessage($"Withdrawak failed. Your balance is to loow to withdraw {Utility.FormatAmount(transaction_amount)}", false);
+            return;
+        }
+        if((selectedAccount.AccountBalance - transaction_amount) < minimumKeptAmount)
+        {
+            Utility.PrintMessage($"Withdrawal failed. Your account needs to have minimum {Utility.FormatAmount(minimumKeptAmount)}", false);
+            return;
+        }
+
+        //Bind withdrawal details to transaction object
+        InsertTransaction(selectedAccount.Id, TransactionType.Withdrawal, -transaction_amount, "");
+
+        //update account balance
+        selectedAccount.AccountBalance -= transaction_amount;
+
+        //success message
+        Utility.PrintMessage($"You have successfully withdrawn {Utility.FormatAmount(transaction_amount)}", true);
     }
 
     private bool PreviewBankZlotysCount(int amount)
@@ -180,7 +228,7 @@ class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
         Console.WriteLine("\nSummary");
         Console.WriteLine("---------");
-        Console.WriteLine($"100{AppScreen.cur} X {hundredsZlotyCount} = {100* hundredsZlotyCount}");
+        Console.WriteLine($"100{AppScreen.cur} X {hundredsZlotyCount} = {100 * hundredsZlotyCount}");
         Console.WriteLine($"50{AppScreen.cur} X {fiftiesZlotyCount} = {50 * fiftiesZlotyCount}");
         Console.WriteLine($"Total amount: {Utility.FormatAmount(amount)}\n\n");
 
