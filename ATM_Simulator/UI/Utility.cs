@@ -21,11 +21,12 @@ namespace ATM_Simulator.App.UI
         {
             Console.WriteLine($"Enter {prompt}");
             return Console.ReadLine();
+
         }
 
         public static void PressEnterToContinue()
         {
-            Console.WriteLine("Press Enter to continue...");
+            Console.WriteLine("\nPress Enter to continue...");
             Console.ReadLine();
         }
 
@@ -95,7 +96,7 @@ namespace ATM_Simulator.App.UI
             for (int i = 0; i < timer; i++)
             {
                 Console.Write(".");
-                Thread.Sleep(200);
+                Thread.Sleep(100);
             }
             Console.Clear();
         }

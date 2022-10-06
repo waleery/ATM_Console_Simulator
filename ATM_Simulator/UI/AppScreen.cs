@@ -5,14 +5,18 @@ namespace ATM_Simulator.App.UI
 {
     public class AppScreen
     {
-        internal const string cur = " Zł"; 
+        internal const string cur = " zł"; 
 
         internal static void Welcome()
         {
+            Console.Clear();
             Console.WriteLine("---------Welcome to my ATM Simulator---------\n\n");
             Console.WriteLine("Please insert your ATM card");
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Note: Actual ATM machine will accept and validate" +
-                " a phisical ATM card, read the card number and validate it \n");
+                " a phisical ATM card, read the card number and validate it.");
+            Console.ForegroundColor = ConsoleColor.White;
+
 
             Utility.PressEnterToContinue();
             Console.Clear();
@@ -23,6 +27,9 @@ namespace ATM_Simulator.App.UI
         {
             UserAccount tempUserAccount = new UserAccount();
 
+            //tempUserAccount.CardNumber = 321321;
+            //tempUserAccount.CardPin = 321321;
+
             tempUserAccount.CardNumber = Validator.Convert<long>("your card number.");
             tempUserAccount.CardPin = Convert.ToInt32(Utility.GetSecretInput("Enter your card PIN"));
 
@@ -32,7 +39,7 @@ namespace ATM_Simulator.App.UI
         //animation of dots
         internal static void LoginProgress()
         {
-            Console.WriteLine("\nChecking card number and PIN...");
+            Console.WriteLine("\n\nChecking card number and PIN...");
             Utility.PrintDotAnimation();
         }
 
@@ -42,7 +49,7 @@ namespace ATM_Simulator.App.UI
             Utility.PrintMessage("You account is locked. Please go to the nearest branch" +
                 " to unlock your account.", false);
             //exit app
-            Environment.Exit(1);
+            //Environment.Exit(1);
         }
 
         internal static void WelcomeCustomer(string fullName)
@@ -57,7 +64,7 @@ namespace ATM_Simulator.App.UI
             Console.WriteLine("---------My ATM Simulator Menu---------\n");
             Console.WriteLine("1. Account Balance                     ");
             Console.WriteLine("2  Cash deposit                        ");
-            Console.WriteLine("3. Withdrawl                           ");
+            Console.WriteLine("3. Withdrawal                          ");
             Console.WriteLine("4. Transfer                            ");
             Console.WriteLine("5. Transactions                        ");
             Console.WriteLine("6. Logout                               \n");
@@ -73,12 +80,13 @@ namespace ATM_Simulator.App.UI
 
         internal static int SelectAmount()
         {
-            Console.WriteLine("");
-            Console.WriteLine(":1. 50 {0}        5.1000{0}",cur);
-            Console.WriteLine(":2. 100{0}       6.2000{0}", cur);
-            Console.WriteLine(":3. 200{0}       7.5000{0}", cur);
-            Console.WriteLine(":4. 500",cur);
-            Console.WriteLine(":0. Other amount");
+            Console.Clear();
+            Console.WriteLine("Select amount:");
+            Console.WriteLine("1. 50 {0}         5.1000{0}",cur);
+            Console.WriteLine("2. 100{0}         6.2000{0}", cur);
+            Console.WriteLine("3. 200{0}         7.5000{0}", cur);
+            Console.WriteLine("4. 500",cur);
+            Console.WriteLine("0. Other amount  10.Go back");
             Console.WriteLine("");
 
 
@@ -102,6 +110,8 @@ namespace ATM_Simulator.App.UI
                     return 5000;
                 case 0:
                     return 0;
+                case 10:
+                    return 10;
                 default:
                     Utility.PrintMessage("Invalid input. Try again.", false);
                     return -1;

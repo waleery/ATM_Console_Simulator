@@ -5,7 +5,7 @@ namespace ATM_Simulator.Domain.Interfaces
     {
         void CheckBalance();
         void PlaceDeposit();
-        void MakeWithDrawal();
+        void MakeWithdrawal();
     }
 }
 

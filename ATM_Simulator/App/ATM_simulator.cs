@@ -54,7 +54,7 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
         while (isCorrectLogin == false)
         {
-        restart:
+       
             UserAccount inputAccount = AppScreen.UserLoginForm();
             AppScreen.LoginProgress();
 
@@ -67,16 +67,16 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
                 //if typed card number is in database
                 if (inputAccount.CardNumber.Equals(selectedAccount.CardNumber))
                 {
-                    selectedAccount.TotalLogin++;
+                    account.TotalLogin++;
 
                     if (inputAccount.CardPin.Equals(selectedAccount.CardPin))
                     {
-                        //selectedAccount = account;
+                        selectedAccount = account;
 
                         if (selectedAccount.IsLocked)
                         {
                             AppScreen.PrintLockScreen();
-                            break;
+                            Run();
                         }
                         else
                         {
@@ -85,25 +85,32 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
                             break;
                         }
                     }
-
-                }
-
-                //if login or PIN was incorrect
-                if (isCorrectLogin == false)
-                {
-                    Utility.PrintMessage("\nInvalid card number or PIN.", false);
-
-                    //if user typed correct card number and wrong pin 3 times, account get blocked
-                    selectedAccount.IsLocked = selectedAccount.TotalLogin == 3;
-
-                    if (selectedAccount.IsLocked)
+                    if(selectedAccount.TotalLogin == 3)
                     {
-                        AppScreen.PrintLockScreen();
+                        selectedAccount.IsLocked = true;
+                        break;
                     }
+
                 }
-                Console.Clear();
-                goto restart;
+                
+
             }
+            //if login or PIN was incorrect
+            if (isCorrectLogin == false)
+            {
+                Utility.PrintMessage("Invalid card number or PIN.", false);
+
+                //if user typed correct card number and wrong pin 3 times, account get blocked
+               // selectedAccount.IsLocked = selectedAccount.TotalLogin == 3;
+
+                if (selectedAccount.IsLocked && selectedAccount.TotalLogin ==3)
+                {
+                    AppScreen.PrintLockScreen();
+                    Run();
+                }
+            }
+            Console.Clear();
+
         }
 
 
@@ -120,7 +127,7 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
                 PlaceDeposit();
                 break;
             case (int)AppMenu.MakeWithdrawl:
-                MakeWithDrawal();
+                MakeWithdrawal();
                 break;
             case (int)AppMenu.InterlanTransfer:
                 var internalTransfer = screen.InternalTransferForm();
@@ -142,6 +149,7 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
 
     public void CheckBalance()
     {
+        Console.Clear();
         Utility.PrintMessage($"Your account balance is: {Utility.FormatAmount(selectedAccount.AccountBalance)}.");
     }
 
@@ -183,39 +191,49 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
         Utility.PrintMessage($"Your deposit of {Utility.FormatAmount(transaction_amount)} was successful.");
     }
 
-    public void MakeWithDrawal()
+    public void MakeWithdrawal()
     {
+        
         var transaction_amount = 0;
         int selectedAmount = AppScreen.SelectAmount();
 
+        if(selectedAmount == 10)
+        {
+            return;
+        }
         if (selectedAmount == -1)
         {
-            MakeWithDrawal();
+            MakeWithdrawal();
             return;
         }
         else if (selectedAmount != 0)
         {
             transaction_amount = selectedAmount;
         }
+        
         else
         {
-            transaction_amount = Validator.Convert<int>($"amount {AppScreen.cur}");
+            Console.WriteLine();
+            transaction_amount = Validator.Convert<int>($"amount{AppScreen.cur}");
         }
 
         //input validation
         if (transaction_amount <= 0)
         {
             Utility.PrintMessage("Amount needs to be greater than zero. Try again", false);
+            MakeWithdrawal();
             return;
+            
         }
         if(transaction_amount % 50 != 0)
         {
             Utility.PrintMessage("You can only withdraw amount in multiples of 50 or 100 zł. Try again.", false);
+            MakeWithdrawal();
             return;
         }
 
         //Business logic validations
-        if(transaction_amount > selectedAccount.AccountBalance)
+        if (transaction_amount > selectedAccount.AccountBalance)
         {
             Utility.PrintMessage($"Withdrawak failed. Your balance is to loow to withdraw {Utility.FormatAmount(transaction_amount)}", false);
             return;
@@ -241,11 +259,11 @@ public class ATM_simulator : IUserLogin, IUserAccountActions, ITransaction
         int hundredsZlotyCount = amount / 100;
         int fiftiesZlotyCount = (amount % 100) / 50;
 
-        Console.WriteLine("\nSummary");
+        Console.WriteLine("Summary");
         Console.WriteLine("---------");
         Console.WriteLine($"100{AppScreen.cur} X {hundredsZlotyCount} = {100 * hundredsZlotyCount}");
-        Console.WriteLine($"50{AppScreen.cur} X {fiftiesZlotyCount} = {50 * fiftiesZlotyCount}");
-        Console.WriteLine($"Total amount: {Utility.FormatAmount(amount)}\n\n");
+        Console.WriteLine($"50 {AppScreen.cur} X {fiftiesZlotyCount} = {50 * fiftiesZlotyCount}");
+        Console.WriteLine($"Total amount: {Utility.FormatAmount(amount)}\n");
 
         int opt = Validator.Convert<int>("1 to confirm");
 
