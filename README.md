@@ -10,3 +10,6 @@ Functionality:
 - Money transfer
 - Viewing previous transactions
 - Logging out
+
+## ✅ Example of action
+![Example](https://github.com/waleery/ATM_Console_Simulator/blob/main/ATM%20simulator.gif?raw=true)
