@@ -1,5 +1,4 @@
 # ATM Console Simulator
-
 ## 📄 Description
 An ATM simulator written in C#.
 
